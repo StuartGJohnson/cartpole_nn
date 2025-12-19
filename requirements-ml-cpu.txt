@@ -1,0 +1,19 @@
+# Use CPU wheels for PyTorch
+--index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://pypi.org/simple
+
+torch
+executorch
+
+# Core scientific + plotting
+numpy
+scipy
+matplotlib
+tqdm
+
+# Optimization stack
+cvxpy
+ecos
+osqp
+scs
+

@@ -31,11 +31,12 @@ def worker(trial_range: range, worker_num: int, output_dir: str):
                               rho=0.05,
                               rho_u=0.02,
                               eps=0.005,
-                              cvxpy_eps=1e-4,
+                              cvxpy_eps=1e-3,
                               max_iters=5000,
                               u_max=np.array([0.8]),
                               s_max=np.array([0.44 / 2.0, 1.5*np.pi, 0.8, 5*np.pi])[None, :],
-                              max_solve_secs=150.0)
+                              max_solve_secs=150.0,
+                              solver_type="OSQP")
 
     tdir = output_dir
     os.makedirs(tdir, exist_ok=True)

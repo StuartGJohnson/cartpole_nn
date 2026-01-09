@@ -30,7 +30,7 @@ def main(tdir: str, update_npz:bool = True):
             final_state = traj.s[-1, :]
             goal_state = traj.sc.s_goal
             goal_error = np.abs(goal_state - final_state)/state_normalization
-            if np.max(goal_error) < 1000.0:
+            if np.max(goal_error[1:]) < 0.1:
                 good_data += 1
             else:
                 continue
@@ -105,4 +105,4 @@ def main(tdir: str, update_npz:bool = True):
     plt.show()
 
 if __name__ == "__main__":
-    main("trajectories_big_2", update_npz=True)
+    main("trajectories_test_cas4", update_npz=False)

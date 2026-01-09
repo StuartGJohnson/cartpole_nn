@@ -1,6 +1,7 @@
 
 from torch_traj_utils.trajectory import TrajectoryScenario, Trajectory, TrajectoryExpert
-from torch_traj_utils.cartpole_solver_velocity import CartpoleSolverVelocity, CartpoleEnvironmentParams, SolverParams
+from torch_traj_utils.cartpole_solver_velocity import CartpoleEnvironmentParams, SolverParams
+from torch_traj_utils.cartpole_solver_velocity_cas import CasadiSolverParams
 
 from torch_traj_utils.plot_trajectory import plot_trajectory
 import numpy as np
@@ -20,7 +21,7 @@ def main(tdir: str):
         with open(file,"rb") as f:
             pickle_fest = pickle.load(f)
         traj: Trajectory = pickle_fest[2]
-        sp: SolverParams = pickle_fest[1]
+        sp: SolverParams | CasadiSolverParams = pickle_fest[1]
         ep: CartpoleEnvironmentParams = pickle_fest[0]
         num_data += 1
         if traj.conv:
@@ -28,15 +29,17 @@ def main(tdir: str):
             final_state = traj.s[-1, :]
             goal_state = traj.sc.s_goal
             goal_error = np.abs(goal_state - final_state)/state_normalization
-            if np.max(goal_error) < 0.10:
+            # my solver settings are tuned to be a bit sloppy on final cart
+            # position
+            if np.max(goal_error[2]) < 0.05:
                 good_data_goal += 1
             # plot!
-            # if (num_data % 10000) == 0:
-            #     plot_trajectory(solver_params=sp, env_params=ep,
-            #                      traj=traj, filename_base="",
-            #                      animate=False)
+            if (num_data % 50) == 0:
+                 plot_trajectory(solver_params=sp, env_params=ep,
+                                  traj=traj, filename_base="",
+                                  animate=False)
     print("converged: ", good_data, num_data, good_data/num_data)
     print("converged to goal: ", good_data_goal, num_data, good_data_goal / num_data)
 
 if __name__ == "__main__":
-    main("trajectories_big_2")
+    main("trajectories_test_cas4")

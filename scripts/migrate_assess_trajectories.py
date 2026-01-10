@@ -31,10 +31,10 @@ def main(tdir: str):
             goal_error = np.abs(goal_state - final_state)/state_normalization
             # my solver settings are tuned to be a bit sloppy on final cart
             # position
-            if np.max(goal_error[2]) < 0.05:
+            if np.max(goal_error[2]) < 0.1:
                 good_data_goal += 1
             # plot!
-            if (num_data % 50) == 0:
+            if (num_data % 10000) == 0:
                  plot_trajectory(solver_params=sp, env_params=ep,
                                   traj=traj, filename_base="",
                                   animate=False)
@@ -42,4 +42,4 @@ def main(tdir: str):
     print("converged to goal: ", good_data_goal, num_data, good_data_goal / num_data)
 
 if __name__ == "__main__":
-    main("trajectories_test_cas4")
+    main("trajectories_4096_cas")

@@ -42,7 +42,7 @@ def eval_loss(model: nn.Sequential | nn.Module, loader: DataLoader, loss_fn, u_m
             n_samples += batch_size
     return total_loss / n_samples
 
-def train(model_name: str, loss_name: str, dname: str, output_dir: str, num_epochs: int, model_type: torch.dtype, restart_epoch: int = -1):
+def train(model_name: str, loss_name: str, dname: str, output_dir: str, num_epochs: int, model_type: torch.dtype, hidden_dim:int, batch_size:int, u_max:float, restart_epoch: int = -1):
     """
     dname: directory name for training
     restart_epoch: if > 0, used to reload
@@ -54,7 +54,7 @@ def train(model_name: str, loss_name: str, dname: str, output_dir: str, num_epoc
     fname = dname + "_validation.npz"
     val_ds, val_s0, _, _ = load_dataset(fname)
 
-    batch_size = 128
+    #batch_size = 128
     train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
 
@@ -63,8 +63,8 @@ def train(model_name: str, loss_name: str, dname: str, output_dir: str, num_epoc
 
     tm = TrajectoryMetrics()
 
-    hidden_dim = 32
-    u_max = 1.05
+    #hidden_dim = 32
+    #u_max = 1.00
     u_thresh = 0.95
 
     model, bs = build_model(model_name, input_dim, hidden_dim, output_dim, u_max, bitspec_name="")
@@ -204,8 +204,11 @@ if __name__ == "__main__":
     train(
         model_name="BM",
         loss_name="BML2",
-        dname="trajectories_big_1",
-        output_dir="trajectories_big_1_HD32_F32_B128",
+        dname="trajectories_4096_cas",
+        output_dir="trajectories_4096_cas_HD32_F32_B128",
         model_type=torch.float32,
-        num_epochs=200,
+        hidden_dim=32,
+        batch_size=128,
+        u_max=1.0,
+        num_epochs=300,
         restart_epoch=-1)

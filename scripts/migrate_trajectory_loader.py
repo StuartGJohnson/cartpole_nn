@@ -105,4 +105,4 @@ def main(tdir: str, update_npz:bool = True):
     plt.show()
 
 if __name__ == "__main__":
-    main("trajectories_test_cas4", update_npz=False)
+    main("trajectories_4096_cas", update_npz=True)
